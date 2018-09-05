@@ -13,7 +13,7 @@ import matplotlib.pyplot as plt
 #1. create df using Pandas read_csv
 def lesson2_1(symb):
 	print("@@@@@@@@@@@@@@@@ lesson2_1 Reading data from {}.csv file@@@@@@@@@@@@@@@@@@".format(symb))
-	df = pd.read_csv("./data/{}.csv".format(symb))
+	df = pd.read_csv("../data/{}.csv".format(symb))
 	print(df.head()) #notice the index is coloumn added(integer)
 	return df
 
