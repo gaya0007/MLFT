@@ -20,6 +20,7 @@ Problems to solve
 2 Join data frames   - Joint the SPY df to the empty data frame with weekend removed.
                      - Add in additional data frames (GOOGL, AAPL)							
 '''
+import os
 import pandas as pd
 import matplotlib.pyplot as plt
 
@@ -41,31 +42,40 @@ def lesson3_2():
 	#'index_col='Date', parse_dates=True
 	#Only read the parameters interested in ['Date', 'Adj Close'] - usecols = ['Date', 'Adj Close']
 	#NaN strings should be treated as not a number , na_values = ['nan']
-	dfspy = pd.read_csv("./data/SPY.csv", index_col='Date', parse_dates=True, usecols = ['Date', 'Adj Close'], na_values = ['nan'])
-	#df1.join() - does a left join by default, rows from left joins with rows from 
-	#right, if not present filled with string NaN
-	df1 = df1.join(dfspy)
-	#drop the na values, days that SPY was not traded
-	df1.dropna()
+	dfspy = pd.read_csv("./data/SPY.csv", index_col='Date', parse_dates=True, 
+		usecols = ['Date', 'Adj Close'], na_values = ['nan'])
+	'''Rename the Adj Close column to make sure final df does not contain the same name'''	
+	dfspy = dfspy.rename(columns={'Adj Close':'SPY'})
+	'''df1.join() - does a left join by default, rows from left joins with rows from 
+	right, if not present filled with string NaN'''
+	df1 = df1.join(dfspy, how=inner)
+	'''Pandas join how argument can be used to drop the na values, inner join  
+	'''
+	#drop the na values, days that SPY was not traded, inner join is used to drop na values 
+	#df1.dropna()
+	
+	'''Joining more data frames in to df1'''
+	for symbol in ['GOOG', 'AAPL']:
+		df_temp = pd.read_csv("../data/{}.csv".format(symbol),index_col='Date', parse_dates=True, 
+			usecols=['Date', 'Adj Close'], na_values = ['nan'])
+		df_temp.rename(columns={'Adj Close':symbol}	
+		df1.join(df_temp)	#use the default join 
 	return df1
 
 
-def lesson2_3(df):
-	print("@@@@@@@@@@@@@@@ lesson2_3 Finding max of the selected 'Close' column @@@@@@@@@@@@@@@@@@@@@")
-	print(df['Close'].max())
-	
-def lesson2_4(df):
-	print("@@@@@@@@@@@@@@@ lesson2_4 Finding mean of the selected 'Close' column @@@@@@@@@@@@@@@@@@@@@")
-	print(df['Close'].mean())
+def lesson3_3(df):
+	print("@@@@@@@@@@@@@@@ lesson3_3 Slicing data @@@@@@@@@@@@@@@@@@@@@")
+	'''selcting a portion of the data frame, certain dates and sertain stocks'''
+	start_date = pd.date_range('2018-01-01','2018-03-03-31')
+	'''row slicing, using df.ix[] selector, start and end date should be ascending order'''
+	print (df.ix['2018-01-01':'2018-03-03-31'])
+	'''Column slicing'''
+	print (df['GOOG', 'AAPL'])
+	'''row and column slicing'''
+	print (df.ix['2018-01-01':'2018-03-03-31',['GOOG', 'AAPL']])
 
-def lesson2_5(df):
-	print("@@@@@@@@@@@@@@@ lesson2_5 plotting 'Close' values @@@@@@@@@@@@@@@@@@@@@")
-	df['Close'].plot()
-	plt.show()	 #must be called to show the plot
-	
+def lesson3_4(df):
+	print("@@@@@@@@@@@@@@@ lesson3_4 Plotting @@@@@@@@@@@@@@@@@@@@@")	
 if __name__ == '__main__':
-	aapl_df = lesson2_1('AAPL')
-	lesson2_2(aapl_df)
-	lesson2_3(aapl_df)
-	lesson2_4(aapl_df)
-	lesson2_5(aapl_df)
+	print(lesson3_1().top())
+	print(lesson3_2().top())
