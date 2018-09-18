@@ -76,6 +76,19 @@ def lesson3_3(df):
 
 def lesson3_4(df):
 	print("@@@@@@@@@@@@@@@ lesson3_4 Plotting @@@@@@@@@@@@@@@@@@@@@")	
+	'''
+	Quizz : normalize price data  df1 = df1/df1[0]
+	use matplotlib.pyplot library for plotting
+	'''
+	#plotting data, to see the graph have to call plt.show(), use fontsize parameter to make the graph more readable
+	title = "Stock Price"
+	df = df/df.ix[0,:] #normalising the data
+	ax  = df.plot(title=title, fontsize=2)
+	#setting x and y lables
+	ax.set_xlabel("Date")
+	ax.set_ylabel("Price")
+	plt.show()
+	
 if __name__ == '__main__':
 	print(lesson3_1().top())
 	print(lesson3_2().top())
