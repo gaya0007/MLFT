@@ -28,7 +28,7 @@ import matplotlib.pyplot as plt
 ######################################################################
 #1. create df using Pandas read_csv
 def lesson3_1():
-	print("@@@@@@@@@@@@@@@@ lesson3_1 Building a data frame @@@@@@@@@@@@@@@@@@".format(symb))
+	print("@@@@@@@@@@@@@@@@ lesson3_1 Building a data frame @@@@@@@@@@@@@@@@@@")
 	start_date = '2017-09-01'
 	end_date = '2017-12-01'
 	dates = pd.date_range(start_date, end_date)# creates a date time element list
@@ -42,30 +42,32 @@ def lesson3_2():
 	#'index_col='Date', parse_dates=True
 	#Only read the parameters interested in ['Date', 'Adj Close'] - usecols = ['Date', 'Adj Close']
 	#NaN strings should be treated as not a number , na_values = ['nan']
-	dfspy = pd.read_csv("./data/SPY.csv", index_col='Date', parse_dates=True, 
-		usecols = ['Date', 'Adj Close'], na_values = ['nan'])
+	dfspy = pd.read_csv("../data/SPY.csv", index_col='Date', parse_dates=True, 
+		usecols=['Date', 'Adj Close'], na_values=['nan'])
 	'''Rename the Adj Close column to make sure final df does not contain the same name'''	
 	dfspy = dfspy.rename(columns={'Adj Close':'SPY'})
+
 	'''df1.join() - does a left join by default, rows from left joins with rows from 
 	right, if not present filled with string NaN'''
-	df1 = df1.join(dfspy, how=inner)
+	df1 = df1.join(dfspy, how='inner')
 	'''Pandas join how argument can be used to drop the na values, inner join  
 	'''
 	#drop the na values, days that SPY was not traded, inner join is used to drop na values 
 	#df1.dropna()
 	
 	'''Joining more data frames in to df1'''
-	for symbol in ['GOOG', 'AAPL']:
+	for symbol in ['GOOGL', 'AAPL']:
 		df_temp = pd.read_csv("../data/{}.csv".format(symbol),index_col='Date', parse_dates=True, 
 			usecols=['Date', 'Adj Close'], na_values = ['nan'])
-		df_temp.rename(columns={'Adj Close':symbol}	
-		df1.join(df_temp)	#use the default join 
+		df_temp.rename(columns={'Adj Close':symbol})
+		df1 = df1.join(df_temp, how='inner')	#use the default join 
+	print(df1.ix[0:10])
 	return df1
 
 
 def lesson3_3(df):
 	print("@@@@@@@@@@@@@@@ lesson3_3 Slicing data @@@@@@@@@@@@@@@@@@@@@")
-	'''selcting a portion of the data frame, certain dates and sertain stocks'''
+	'''selcting a portion of the data frame, certain dates and certain stocks'''
 	start_date = pd.date_range('2018-01-01','2018-03-03-31')
 	'''row slicing, using df.ix[] selector, start and end date should be ascending order'''
 	print (df.ix['2018-01-01':'2018-03-03-31'])
@@ -90,5 +92,7 @@ def lesson3_4(df):
 	plt.show()
 	
 if __name__ == '__main__':
-	print(lesson3_1().top())
-	print(lesson3_2().top())
+
+	df = lesson3_2()
+	lesson3_3(df)
+	lesson3_4(df)
